@@ -49,10 +49,14 @@ class Gite
     #[ORM\ManyToMany(targetEntity: EquipmentExt::class, inversedBy: 'gites')]
     private Collection $gite_equipment_ext;
 
+    #[ORM\OneToMany(mappedBy: 'gite_id', targetEntity: ServiceGite::class)]
+    private Collection $serviceGites;
+
     public function __construct()
     {
         $this->Gite_equipement_int = new ArrayCollection();
         $this->gite_equipment_ext = new ArrayCollection();
+        $this->serviceGites = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -212,6 +216,36 @@ class Gite
     public function removeGiteEquipmentExt(EquipmentExt $giteEquipmentExt): self
     {
         $this->gite_equipment_ext->removeElement($giteEquipmentExt);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ServiceGite>
+     */
+    public function getServiceGites(): Collection
+    {
+        return $this->serviceGites;
+    }
+
+    public function addServiceGite(ServiceGite $serviceGite): self
+    {
+        if (!$this->serviceGites->contains($serviceGite)) {
+            $this->serviceGites->add($serviceGite);
+            $serviceGite->setGiteId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeServiceGite(ServiceGite $serviceGite): self
+    {
+        if ($this->serviceGites->removeElement($serviceGite)) {
+            // set the owning side to null (unless already changed)
+            if ($serviceGite->getGiteId() === $this) {
+                $serviceGite->setGiteId(null);
+            }
+        }
 
         return $this;
     }
