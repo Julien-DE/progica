@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gite index{% endblock %}
+
+{% block body %}
+    <h1>Gite index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Animals_allowed</th>
+                <th>Price_animals</th>
+                <th>Adresse</th>
+                <th>Postal_code</th>
+                <th>City</th>
+                <th>Departement</th>
+                <th>Region</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for gite in gites %}
+            <tr>
+                <td>{{ gite.id }}</td>
+                <td>{{ gite.name }}</td>
+                <td>{{ gite.description }}</td>
+                <td>{{ gite.animalsAllowed ? 'Yes' : 'No' }}</td>
+                <td>{{ gite.priceAnimals }}</td>
+                <td>{{ gite.adresse }}</td>
+                <td>{{ gite.postalCode }}</td>
+                <td>{{ gite.city }}</td>
+                <td>{{ gite.departement }}</td>
+                <td>{{ gite.region }}</td>
+                <td>
+                    <a href="{{ path('app_gite_show', {'id': gite.id}) }}">show</a>
+                    <a href="{{ path('app_gite_edit', {'id': gite.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="11">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_gite_new') }}">Create new</a>
+{% endblock %}
