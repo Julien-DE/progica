@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\GiteRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -40,6 +42,18 @@ class Gite
 
     #[ORM\Column(length: 255)]
     private ?string $region = null;
+
+    #[ORM\ManyToMany(targetEntity: EquipmentInt::class, inversedBy: 'gites')]
+    private Collection $Gite_equipement_int;
+
+    #[ORM\ManyToMany(targetEntity: EquipmentExt::class, inversedBy: 'gites')]
+    private Collection $gite_equipment_ext;
+
+    public function __construct()
+    {
+        $this->Gite_equipement_int = new ArrayCollection();
+        $this->gite_equipment_ext = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -150,6 +164,54 @@ class Gite
     public function setRegion(string $region): self
     {
         $this->region = $region;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, EquipmentInt>
+     */
+    public function getGiteEquipementInt(): Collection
+    {
+        return $this->Gite_equipement_int;
+    }
+
+    public function addGiteEquipementInt(EquipmentInt $giteEquipementInt): self
+    {
+        if (!$this->Gite_equipement_int->contains($giteEquipementInt)) {
+            $this->Gite_equipement_int->add($giteEquipementInt);
+        }
+
+        return $this;
+    }
+
+    public function removeGiteEquipementInt(EquipmentInt $giteEquipementInt): self
+    {
+        $this->Gite_equipement_int->removeElement($giteEquipementInt);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, EquipmentExt>
+     */
+    public function getGiteEquipmentExt(): Collection
+    {
+        return $this->gite_equipment_ext;
+    }
+
+    public function addGiteEquipmentExt(EquipmentExt $giteEquipmentExt): self
+    {
+        if (!$this->gite_equipment_ext->contains($giteEquipmentExt)) {
+            $this->gite_equipment_ext->add($giteEquipmentExt);
+        }
+
+        return $this;
+    }
+
+    public function removeGiteEquipmentExt(EquipmentExt $giteEquipmentExt): self
+    {
+        $this->gite_equipment_ext->removeElement($giteEquipmentExt);
 
         return $this;
     }
